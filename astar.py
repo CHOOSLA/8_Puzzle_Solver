@@ -10,9 +10,9 @@ class State:
 
     # i1과 i2를 교환하여서 새로운 상태를 반환한다.
     def get_new_board(self, i1, i2, moves):
-        new_board = self.board[:]
-        new_board[i1], new_board[i2] = new_board[i2], new_board[i1]
-        return State(new_board, self.goal, moves)
+        new_board = self.board[:] #배열의 전체를 선택
+        new_board[i1], new_board[i2] = new_board[i2], new_board[i1] #두개의 값 교환
+        return State(new_board, self.goal, moves) #새로운 보드를 return
 
     # 자식 노드를 확장하여서 리스트에 저장하여서 반환한다.
     def expand(self, moves):
@@ -22,13 +22,13 @@ class State:
             result.append(self.get_new_board(i, i - 3, moves))
         if not i in [0, 3, 6]:  # LEFT 연산자
             result.append(self.get_new_board(i, i - 1, moves))
-        if not i in [2, 5, 8]:  # DOWN 연산자
+        if not i in [2, 5, 8]:  # RIGHT 연산자
             result.append(self.get_new_board(i, i + 1, moves))
-        if not i in [6, 7, 8]:  # RIGHT 연산자
+        if not i in [6, 7, 8]:  # DOWN 연산자
             result.append(self.get_new_board(i, i + 3, moves))
         return result
 
-    # f(n)을 계산하여 반환한다. 
+    # f(n)을 계산하여 반환한다.
     def f(self):
         return self.h() + self.g()
 
@@ -74,6 +74,7 @@ goal = [1, 2, 3,
 
 # open 리스트는 우선순위 큐로 생성한다.
 open_queue = queue.PriorityQueue()
+
 open_queue.put(State(puzzle, goal))
 
 closed_queue = []
